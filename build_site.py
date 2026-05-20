@@ -9,6 +9,7 @@ import textwrap
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
+from urllib.parse import urlparse
 
 from data.tools_seed import CATEGORIES, SITE_NAME, SITE_TAGLINE, TOOLS_BY_CATEGORY
 
@@ -56,6 +57,9 @@ def reset_output() -> None:
         shutil.rmtree(PUBLIC)
     PUBLIC.mkdir(parents=True)
     (PUBLIC / ".nojekyll").write_text("", encoding="utf-8")
+    custom_domain = custom_domain_from_base_url(BASE_URL)
+    if custom_domain:
+        (PUBLIC / "CNAME").write_text(f"{custom_domain}\n", encoding="utf-8")
     ARTICLES.mkdir(parents=True, exist_ok=True)
     for old in ARTICLES.glob("*.md"):
         old.unlink()
@@ -194,6 +198,13 @@ def build_tools() -> list[Tool]:
                 )
             )
     return tools
+
+
+def custom_domain_from_base_url(base_url: str) -> str:
+    host = urlparse(base_url).netloc
+    if not host or host.endswith(".github.io") or host == "example.com":
+        return ""
+    return host
 
 
 def build_article_body(name: str, category_id: str, category: dict, position: int, related_names: list[str]) -> str:
