@@ -49,6 +49,7 @@ https://你的用户名.github.io/ai-tools-directory/
 如果要写入真实 AdSense ID，在仓库 `Settings` -> `Secrets and variables` -> `Actions` -> `Variables` 里新增：
 
 ```text
+SITE_BASE_URL=https://你的域名
 ADSENSE_CLIENT=ca-pub-你的发布商ID
 ADSENSE_PUBLISHER_ID=pub-你的发布商ID
 ```
