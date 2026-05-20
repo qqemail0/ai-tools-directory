@@ -481,16 +481,26 @@ def write_page(
 <body>
   <header class="site-header">
     <a class="brand" href="{prefix}index.html"><span>AI</span>{SITE_NAME}</a>
-    <nav>
-      <a href="{prefix}index.html">导航</a>
-      <a href="{prefix}about.html">关于</a>
-      <a href="{prefix}privacy.html">隐私与广告</a>
-      <a href="{prefix}contact.html">提交工具</a>
-    </nav>
+    <div class="header-actions">
+      <nav>
+        <a href="{prefix}index.html">导航</a>
+        <a href="{prefix}about.html">关于</a>
+        <a href="{prefix}privacy.html">隐私与广告</a>
+        <a href="{prefix}contact.html">提交工具</a>
+      </nav>
+      <a class="repo-orb" href="https://github.com/qqemail0/ai-tools-directory" target="_blank" rel="noreferrer" aria-label="开源地址 GitHub">
+        <span>GH</span>
+      </a>
+    </div>
   </header>
   <main>{content}</main>
-  <footer>
-    <p>{SITE_NAME} · 工具信息以官网为准 · 广告位只使用清晰标签，不诱导点击。 · 开源地址 <a href="https://github.com/qqemail0/ai-tools-directory" target="_blank" rel="noreferrer">github.com/qqemail0/ai-tools-directory</a></p>
+  <footer class="source-footer" aria-label="开源地址">
+    <div class="source-footer-copy">
+      <span>开源地址</span>
+      <strong>{SITE_NAME} 开放源码</strong>
+      <p>查看静态生成脚本、SEO 内容构建和 GitHub Pages 部署流程。</p>
+    </div>
+    <a class="source-footer-link" href="https://github.com/qqemail0/ai-tools-directory" target="_blank" rel="noreferrer">GitHub 仓库</a>
   </footer>
   <script src="{prefix}assets/app.js" defer></script>
 </body>
@@ -606,7 +616,7 @@ STYLES = """
 *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:"Microsoft YaHei","PingFang SC","Segoe UI",sans-serif;line-height:1.65}a{color:inherit;text-decoration:none}
 .site-header{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:14px 28px;border-bottom:1px solid var(--line);background:rgba(247,242,232,.92);backdrop-filter:blur(14px)}
 .brand{display:flex;align-items:center;gap:10px;font-weight:800}.brand span{display:inline-grid;place-items:center;width:34px;height:34px;background:var(--ink);color:white;border-radius:6px}
-nav{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:14px}main{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:22px 0 48px}
+.header-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:flex-end}nav{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:14px}.repo-orb{display:inline-grid;place-items:center;width:38px;height:38px;border:1px solid var(--ink);border-radius:50%;background:var(--ink);color:#fffdf7;font-size:12px;font-weight:900;text-decoration:none;box-shadow:0 14px 34px rgba(23,32,27,.18);transition:transform .16s ease,background .16s ease,border-color .16s ease}.repo-orb:hover{transform:translateY(-1px);background:var(--green);border-color:var(--green)}main{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:22px 0 48px}
 .directory-head{display:grid;grid-template-columns:minmax(0,1fr) 336px;gap:22px;align-items:stretch;margin:10px 0 22px}.directory-head.compact{margin-top:18px}
 .eyebrow{margin:0 0 8px;color:var(--red);font-weight:800;letter-spacing:0;text-transform:uppercase;font-size:13px}h1{font-family:"Noto Serif CJK SC","Source Han Serif SC","SimSun",Georgia,serif;font-size:52px;line-height:1.08;margin:0 0 14px;letter-spacing:0}h2{font-size:24px;margin:28px 0 12px;letter-spacing:0}p{margin:0 0 14px;color:var(--muted)}
 .search-panel{padding:16px;border:1px solid var(--line);background:var(--panel);border-radius:8px;margin:16px 0 22px}.search-panel label{display:block;font-weight:800;margin-bottom:8px}.search-panel input{width:100%;padding:14px 16px;border:1px solid var(--line);border-radius:6px;background:white;font-size:16px}
@@ -617,8 +627,8 @@ nav{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:14px}main{
 .ad-slot{display:flex;flex-direction:column;justify-content:center;min-height:160px;padding:14px;border:1px dashed #a99f8d;background:#fffaf0;border-radius:8px;color:var(--muted)}.ad-slot span{font-size:12px;text-transform:uppercase;color:#8b7f6d}.ad-slot strong{color:var(--ink)}
 .article{max-width:820px;margin:18px auto;padding:22px;border:1px solid var(--line);background:var(--panel);border-radius:8px}.article h1{font-size:44px}.summary{font-size:18px;color:#445047}.breadcrumb{font-size:13px;color:var(--muted);margin-bottom:12px}.related ul{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;padding-left:18px}
 .fact-table{width:100%;border-collapse:collapse;margin:18px 0;border:1px solid var(--line);background:#fff}.fact-table th,.fact-table td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}.fact-table th{width:116px;text-align:left;color:var(--ink);background:#f2eadc}.fact-table td{color:#445047}.editor-note{padding:10px 12px;border-left:4px solid var(--green);background:#eef7f1;color:#3e5548;border-radius:4px}
-footer{border-top:1px solid var(--line);padding:24px;text-align:center;color:var(--muted);font-size:14px}footer a{color:var(--green);font-weight:800;text-decoration:none}footer a:hover{text-decoration:underline}
-@media(max-width:820px){.site-header{align-items:flex-start;flex-direction:column;padding:12px 16px}.directory-head{grid-template-columns:1fr}h1{font-size:34px}.article h1{font-size:32px}.article{padding:16px}.category-grid,.tool-grid{grid-template-columns:1fr}}
+.source-footer{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:16px;width:min(1180px,calc(100% - 32px));margin:0 auto 24px;border:1px solid var(--line);border-radius:8px;padding:16px;background:linear-gradient(135deg,rgba(31,106,85,.08),transparent 34%),linear-gradient(315deg,rgba(200,68,46,.08),transparent 38%),rgba(255,253,247,.92);box-shadow:0 18px 54px rgba(23,32,27,.1);color:var(--muted);font-size:14px}.source-footer-copy span{display:block;margin-bottom:4px;color:var(--red);font-size:12px;font-weight:900;text-transform:uppercase}.source-footer-copy strong{display:block;color:var(--ink);font-family:"Noto Serif CJK SC","Source Han Serif SC","SimSun",Georgia,serif;font-size:18px}.source-footer-copy p{margin:6px 0 0;color:var(--muted)}.source-footer-link{display:inline-flex;align-items:center;justify-content:center;min-height:40px;border:1px solid var(--ink);border-radius:8px;padding:0 14px;background:var(--ink);color:#fffdf7;font-weight:900;text-decoration:none}.source-footer-link:hover{background:var(--green);border-color:var(--green)}
+@media(max-width:820px){.site-header{align-items:flex-start;flex-direction:column;padding:12px 16px}.header-actions{justify-content:flex-start}.directory-head{grid-template-columns:1fr}h1{font-size:34px}.article h1{font-size:32px}.article{padding:16px}.category-grid,.tool-grid{grid-template-columns:1fr}.source-footer{grid-template-columns:1fr}.source-footer-link{width:100%}}
 """
 
 
