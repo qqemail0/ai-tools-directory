@@ -37,6 +37,7 @@ def main() -> None:
 
     index = (PUBLIC / "index.html").read_text(encoding="utf-8")
     assert "Advertisements" in index
+    assert "https://github.com/qqemail0/ai-tools-directory" in index
     forbidden = ["请点击广告", "点击广告支持", "帮忙点广告", "多点广告", "click the ads", "support us by clicking"]
     all_html = "\n".join(path.read_text(encoding="utf-8").lower() for path in PUBLIC.rglob("*.html"))
     assert not any(term.lower() in all_html for term in forbidden)

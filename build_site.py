@@ -16,9 +16,9 @@ from data.tools_seed import CATEGORIES, SITE_NAME, SITE_TAGLINE, TOOLS_BY_CATEGO
 ROOT = Path(__file__).parent
 PUBLIC = ROOT / "public"
 ARTICLES = ROOT / "content" / "articles"
-BASE_URL = os.environ.get("SITE_BASE_URL", "https://example.com").rstrip("/")
-ADSENSE_CLIENT = os.environ.get("ADSENSE_CLIENT", "")
-ADSENSE_PUBLISHER_ID = os.environ.get("ADSENSE_PUBLISHER_ID", "")
+BASE_URL = os.environ.get("SITE_BASE_URL", "https://mo.novaeworld.top").rstrip("/")
+ADSENSE_CLIENT = os.environ.get("ADSENSE_CLIENT", "ca-pub-4978649785396171")
+ADSENSE_PUBLISHER_ID = os.environ.get("ADSENSE_PUBLISHER_ID", "pub-4978649785396171")
 TODAY = date.today().isoformat()
 
 
@@ -490,7 +490,7 @@ def write_page(
   </header>
   <main>{content}</main>
   <footer>
-    <p>{SITE_NAME} · 工具信息以官网为准 · 广告位只使用清晰标签，不诱导点击。</p>
+    <p>{SITE_NAME} · 工具信息以官网为准 · 广告位只使用清晰标签，不诱导点击。 · 开源地址 <a href="https://github.com/qqemail0/ai-tools-directory" target="_blank" rel="noreferrer">github.com/qqemail0/ai-tools-directory</a></p>
   </footer>
   <script src="{prefix}assets/app.js" defer></script>
 </body>
@@ -617,7 +617,7 @@ nav{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:14px}main{
 .ad-slot{display:flex;flex-direction:column;justify-content:center;min-height:160px;padding:14px;border:1px dashed #a99f8d;background:#fffaf0;border-radius:8px;color:var(--muted)}.ad-slot span{font-size:12px;text-transform:uppercase;color:#8b7f6d}.ad-slot strong{color:var(--ink)}
 .article{max-width:820px;margin:18px auto;padding:22px;border:1px solid var(--line);background:var(--panel);border-radius:8px}.article h1{font-size:44px}.summary{font-size:18px;color:#445047}.breadcrumb{font-size:13px;color:var(--muted);margin-bottom:12px}.related ul{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;padding-left:18px}
 .fact-table{width:100%;border-collapse:collapse;margin:18px 0;border:1px solid var(--line);background:#fff}.fact-table th,.fact-table td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}.fact-table th{width:116px;text-align:left;color:var(--ink);background:#f2eadc}.fact-table td{color:#445047}.editor-note{padding:10px 12px;border-left:4px solid var(--green);background:#eef7f1;color:#3e5548;border-radius:4px}
-footer{border-top:1px solid var(--line);padding:24px;text-align:center;color:var(--muted);font-size:14px}
+footer{border-top:1px solid var(--line);padding:24px;text-align:center;color:var(--muted);font-size:14px}footer a{color:var(--green);font-weight:800;text-decoration:none}footer a:hover{text-decoration:underline}
 @media(max-width:820px){.site-header{align-items:flex-start;flex-direction:column;padding:12px 16px}.directory-head{grid-template-columns:1fr}h1{font-size:34px}.article h1{font-size:32px}.article{padding:16px}.category-grid,.tool-grid{grid-template-columns:1fr}}
 """
 
