@@ -2,6 +2,10 @@
 
 一个面向 Google 搜索流量和 AdSense 变现的静态 AI 工具导航网站。
 
+## 线上访问
+
+GitHub Pages: http://mo.novaeworld.top/
+
 ## 已实现
 
 - 10 个 AI 工具分类，每类 25 个工具，共 250 篇文章。
