@@ -1,8 +1,8 @@
 {
   "total_articles": 250,
-  "min_chars": 776,
-  "max_chars": 971,
-  "average_chars": 824.4,
+  "min_chars": 1394,
+  "max_chars": 1741,
+  "average_chars": 1480.3,
   "by_category": {
     "writing": 25,
     "research": 25,

@@ -6,7 +6,8 @@
 
 - 10 个 AI 工具分类，每类 25 个工具，共 250 篇文章。
 - 每篇文章标题包含分类关键词，例如 `AI写作工具`、`AI绘图工具`、`AI编程工具`。
-- 每篇正文约 810 字左右，生成 Markdown 和 HTML 两份。
+- 每篇正文约 1400-1700 字，生成 Markdown 和 HTML 两份。
+- 文章页包含快速判断表、适合人群、上手流程、选择风险、替代工具和 FAQ。
 - 首页、分类页、文章页、关于、联系、隐私与广告说明页。
 - 站内搜索、内部链接、Article JSON-LD、canonical、sitemap.xml、robots.txt。
 - AdSense 友好广告位，占位标签统一使用 `Advertisements`。

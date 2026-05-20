@@ -18,9 +18,9 @@ def main() -> None:
 
     stats = json.loads((ROOT / "content" / "article_stats.json").read_text(encoding="utf-8"))
     assert stats["total_articles"] == 250, stats
-    assert 760 <= stats["min_chars"] <= 820, stats
-    assert 810 <= stats["average_chars"] <= 860, stats
-    assert stats["max_chars"] <= 980, stats
+    assert stats["min_chars"] >= 1250, stats
+    assert 1300 <= stats["average_chars"] <= 1700, stats
+    assert stats["max_chars"] <= 1900, stats
 
     titles = []
     for article in article_files:

@@ -61,18 +61,123 @@ def reset_output() -> None:
         old.unlink()
 
 
+CATEGORY_PROFILES = {
+    "writing": {
+        "personas": ["内容运营", "独立站站长", "SEO编辑", "社媒创作者"],
+        "jobs": ["长文初稿生成", "标题和摘要改写", "产品描述扩写", "邮件和社媒脚本整理"],
+        "metrics": ["结构完整度、可读性、事实准确性和品牌语气"],
+        "pitfalls": ["必须核对事实、引用、数字和品牌承诺，避免把未验证内容直接发布"],
+        "strengths": ["适合快速搭建内容框架，并把零散想法整理成可编辑草稿"],
+        "limitations": ["输出容易显得模板化，需要加入真实案例、产品细节和人工观点"],
+        "workflow": "brief -> draft -> edit -> publish",
+        "evaluation": "看首稿可用率、改稿次数、标题 CTR 和自然搜索表现",
+    },
+    "research": {
+        "personas": ["研究助理", "产品经理", "投资分析师", "学生和知识工作者"],
+        "jobs": ["资料检索", "论文和报告速读", "竞品信息整理", "问题拆解和事实核查"],
+        "metrics": ["来源透明度、引用质量、覆盖范围和结论可验证性"],
+        "pitfalls": ["不能把摘要当作最终事实，关键结论要回到原始来源复核"],
+        "strengths": ["适合把陌生主题快速拆成问题清单、关键词和可继续阅读的资料路径"],
+        "limitations": ["不同工具对来源展示和引用准确性的处理差异很大"],
+        "workflow": "question -> sources -> synthesis -> verification",
+        "evaluation": "看引用是否可追溯、是否覆盖反例、是否减少二次搜索时间",
+    },
+    "image": {
+        "personas": ["设计师", "电商运营", "品牌主理人", "广告素材制作人员"],
+        "jobs": ["封面图生成", "商品图优化", "广告视觉探索", "品牌风格草案制作"],
+        "metrics": ["画面一致性、可控性、版权风险、商用输出质量"],
+        "pitfalls": ["商用前要确认素材授权、人物肖像、商标和训练数据相关风险"],
+        "strengths": ["适合快速探索多种视觉方向，并把创意从文字变成可讨论的画面"],
+        "limitations": ["复杂文字、精确构图和系列一致性仍需要人工精修"],
+        "workflow": "prompt -> variations -> refine -> export",
+        "evaluation": "看生成稳定性、局部修改能力、分辨率和品牌一致性",
+    },
+    "video": {
+        "personas": ["短视频运营", "课程创作者", "品牌营销团队", "自媒体剪辑师"],
+        "jobs": ["脚本转视频", "数字人讲解", "字幕和片段剪辑", "短视频素材再加工"],
+        "metrics": ["画面连贯性、音画同步、字幕准确率和导出效率"],
+        "pitfalls": ["发布前要检查人物授权、素材版权、事实表述和平台审核风险"],
+        "strengths": ["适合缩短从脚本到视频草稿的周期，让团队更快测试创意方向"],
+        "limitations": ["长视频叙事、复杂镜头调度和品牌级成片仍需要专业剪辑介入"],
+        "workflow": "script -> assets -> generation -> edit -> publish",
+        "evaluation": "看成片可用率、重剪成本、导出格式和批量生产能力",
+    },
+    "coding": {
+        "personas": ["全栈开发者", "独立开发者", "技术负责人", "低代码产品团队"],
+        "jobs": ["代码补全", "错误排查", "测试用例生成", "原型页面和脚本开发"],
+        "metrics": ["代码正确性、安全性、可维护性和测试覆盖"],
+        "pitfalls": ["生成代码必须经过审查和测试，尤其是认证、支付、数据库和权限逻辑"],
+        "strengths": ["适合减少重复编码和搜索文档时间，帮助开发者更快形成可运行原型"],
+        "limitations": ["复杂架构判断、业务边界和安全责任仍必须由工程师把关"],
+        "workflow": "issue -> context -> patch -> tests -> review",
+        "evaluation": "看能否减少上下文切换、是否通过测试、是否符合项目风格",
+    },
+    "office": {
+        "personas": ["团队负责人", "项目经理", "行政和运营人员", "销售团队"],
+        "jobs": ["会议纪要", "任务拆解", "文档总结", "幻灯片和日程整理"],
+        "metrics": ["信息完整度、责任人清晰度、协作效率和后续执行率"],
+        "pitfalls": ["涉及客户、合同或内部机密时，要检查隐私设置和数据留存方式"],
+        "strengths": ["适合把分散信息变成结构化任务和文档，减少沟通损耗"],
+        "limitations": ["如果团队流程本身混乱，AI 只能整理信息，不能替代管理决策"],
+        "workflow": "capture -> summarize -> assign -> follow-up",
+        "evaluation": "看纪要准确率、任务遗漏率、团队采用率和节省时间",
+    },
+    "marketing": {
+        "personas": ["增长负责人", "广告投放人员", "SEO运营", "B2B销售团队"],
+        "jobs": ["广告素材生成", "SEO页面规划", "销售邮件撰写", "社媒内容排期"],
+        "metrics": ["转化率、点击率、线索质量、内容一致性和测试效率"],
+        "pitfalls": ["不要用夸张承诺或虚假稀缺制造点击，广告和落地页必须一致"],
+        "strengths": ["适合快速生成多版本创意，帮助团队用数据筛选有效方向"],
+        "limitations": ["它不能替代定位、报价、用户洞察和渠道策略"],
+        "workflow": "audience -> message -> variations -> test -> optimize",
+        "evaluation": "看素材迭代速度、A/B 测试表现和最终线索质量",
+    },
+    "audio": {
+        "personas": ["播客创作者", "课程团队", "短视频剪辑师", "品牌内容团队"],
+        "jobs": ["配音生成", "播客清理", "音乐草稿", "降噪和声音素材处理"],
+        "metrics": ["声音自然度、情绪控制、授权范围和后期处理成本"],
+        "pitfalls": ["克隆声音、音乐商用和人物授权要特别谨慎，避免侵权"],
+        "strengths": ["适合让声音内容生产更轻量，尤其适合批量脚本和多语言版本"],
+        "limitations": ["高端品牌广告、影视配乐和强表演性声音仍需要专业制作"],
+        "workflow": "script -> voice/style -> generation -> mastering -> publish",
+        "evaluation": "看听感自然度、噪声控制、导出格式和版权条款",
+    },
+    "data": {
+        "personas": ["业务分析师", "运营负责人", "财务人员", "产品经理"],
+        "jobs": ["表格分析", "指标归因", "图表解释", "报表自动化和预测"],
+        "metrics": ["计算准确性、可解释性、数据权限和结论复现性"],
+        "pitfalls": ["关键指标要用原始数据复算，不能只相信自然语言解释"],
+        "strengths": ["适合让非技术人员用自然语言理解数据，降低分析门槛"],
+        "limitations": ["脏数据、口径不一致和权限问题仍需要数据治理来解决"],
+        "workflow": "data -> question -> analysis -> chart -> decision",
+        "evaluation": "看能否复现结论、是否解释口径、是否支持导出和协作",
+    },
+    "automation": {
+        "personas": ["运营自动化负责人", "客服团队", "独立创业者", "内部工具开发者"],
+        "jobs": ["工作流编排", "客服机器人", "网页采集", "智能体任务和线索处理"],
+        "metrics": ["成功率、失败重试、日志可追踪性和人工接管能力"],
+        "pitfalls": ["自动化必须设置权限、审计和回滚，不能让机器人无限制执行敏感动作"],
+        "strengths": ["适合把重复流程串起来，让任务从提醒、复制和录入变成自动执行"],
+        "limitations": ["跨系统流程越复杂，越需要异常处理、权限边界和人工审批"],
+        "workflow": "trigger -> action -> review -> fallback",
+        "evaluation": "看执行成功率、维护成本、异常告警和节省人力时间",
+    },
+}
+
+
 def build_tools() -> list[Tool]:
     tools: list[Tool] = []
     for category_id, names in TOOLS_BY_CATEGORY.items():
         category = CATEGORIES[category_id]
         for position, name in enumerate(names, start=1):
             slug = f"{category_id}-{slugify(name)}"
-            title = f"{name} {category['keyword']}推荐：{category['name']}场景、优势与选择指南"
+            title = f"{name}是什么？{category['keyword']}使用场景、优缺点和替代工具"
             description = (
-                f"了解 {name} 在{category['name']}中的适用场景、核心价值、使用建议和替代选择，"
-                f"适合正在寻找{category['keyword']}的个人、团队和中小企业。"
+                f"{name} 适合谁使用？本文从{category['keyword']}搜索意图出发，整理核心场景、"
+                f"上手流程、选择风险、同类替代工具和 FAQ。"
             )
-            body = build_article_body(name, category_id, category, position)
+            related_names = names[position:position + 4] + names[:max(0, 4 - len(names[position:position + 4]))]
+            body = build_article_body(name, category_id, category, position, related_names)
             tools.append(
                 Tool(
                     name=name,
@@ -91,65 +196,40 @@ def build_tools() -> list[Tool]:
     return tools
 
 
-def build_article_body(name: str, category_id: str, category: dict, position: int) -> str:
+def build_article_body(name: str, category_id: str, category: dict, position: int, related_names: list[str]) -> str:
     keyword = category["keyword"]
     category_name = category["name"]
     intent = category["intent"]
-    scenarios = {
-        "writing": ("选题规划、长文草稿、标题改写、产品描述、邮件和社媒脚本", "内容团队可以把它放在关键词研究之后、人工校对之前"),
-        "research": ("资料检索、论文阅读、竞品梳理、事实核对和问题拆解", "研究人员可以把它作为第一轮信息地图，而不是最终结论"),
-        "image": ("封面图、广告图、商品图、品牌视觉、灵感探索和批量改图", "设计人员可以先用它验证方向，再进入精修环节"),
-        "video": ("短视频脚本、数字人讲解、字幕生成、片段剪辑和素材复用", "运营团队可以用它缩短从想法到可发布视频的周期"),
-        "coding": ("代码补全、需求拆解、错误排查、测试用例和原型开发", "开发者可以让它处理重复劳动，把架构判断留给人工"),
-        "office": ("会议纪要、任务分解、文档总结、幻灯片和日程安排", "团队可以把它嵌入日常办公流程，减少低价值切换"),
-        "marketing": ("SEO内容、广告素材、销售邮件、社媒排期和线索运营", "增长团队可以用它做多版本测试，再用数据筛选胜出方案"),
-        "audio": ("配音、播客清理、音乐草稿、降噪、字幕和多语言声音内容", "创作者可以用它提升声音素材的生产和交付效率"),
-        "data": ("表格分析、图表解释、指标归因、预测建模和报表自动化", "业务人员可以用自然语言询问数据，再交叉验证关键结论"),
-        "automation": ("客服机器人、网页采集、工作流编排、智能体任务和线索处理", "运营团队可以先从单一流程自动化开始，再逐步扩大范围"),
-    }[category_id]
-    differentiator = [
-        "它的价值不在于替代专业判断，而在于把重复、低门槛、耗时的步骤压缩到几分钟内。",
-        "选择这类工具时，不要只看演示效果，更要看输出是否稳定、是否容易复用到真实工作流。",
-        "如果你的目标是做内容站或商业项目，它适合承担前期素材整理和方案草拟，但最终发布前仍要人工复核。",
-        "对于想提升效率的团队，最好的使用方式是固定输入模板、保存优秀案例，并建立可复查的质量标准。",
-    ][position % 4]
-    compare = [
-        "如果你更重视免费额度，可以先对比同类产品的限制；如果你更重视团队协作，则应关注权限、版本和导出能力。",
-        "如果你已经有成熟流程，建议先把它接入一个小任务，确认结果稳定后再扩大到更多成员。",
-        "如果你面向中文用户，还要额外检查中文理解、术语一致性和本地化输出质量。",
-        "如果页面要依靠搜索流量变现，文章中应给出真实场景、优缺点和替代方案，而不是堆砌关键词。",
-    ][position % 4]
-    ad_note = (
-        "从网站变现角度看，围绕它写工具介绍、对比清单和常见问题页，比单纯放链接更容易承接长尾搜索。"
-        "广告位应清楚标注，避免任何诱导点击。"
-    )
-    qa = [
-        f"{name} 适合新手吗？如果需求集中在{scenarios[0]}，新手可以从模板化任务开始，先验证输出质量，再增加复杂要求。",
-        f"{name} 能直接替代人工吗？更合理的定位是辅助工具。它能提高初稿、检索和整理速度，但事实准确性、版权风险和品牌语气仍要人工确认。",
-    ]
+    profile = CATEGORY_PROFILES[category_id]
+    primary_job = profile["jobs"][(position - 1) % len(profile["jobs"])]
+    secondary_job = profile["jobs"][position % len(profile["jobs"])]
+    persona = profile["personas"][(position + 1) % len(profile["personas"])]
+    metric = profile["metrics"][position % len(profile["metrics"])]
+    pitfall = profile["pitfalls"][(position + 2) % len(profile["pitfalls"])]
+    evaluation = profile["evaluation"]
+    alternatives = "、".join(related_names[:4])
+    strength = profile["strengths"][position % len(profile["strengths"])]
+    limitation = profile["limitations"][position % len(profile["limitations"])]
     body = f"""
-    {name} 是一个值得收录到 AI 工具导航中的 {keyword}。它适合希望在{category_name}环节节省时间的人，尤其是需要{intent}的个人创作者、运营团队和中小企业。相比只收藏官网链接，更有价值的做法是理解它能解决什么问题、适合什么任务，以及什么时候应该换用其他工具。
+    快速结论：{name} 更适合把它当作一个面向“{primary_job}”的{keyword}候选，而不是简单收藏在导航页里等以后再看。正在做{category_name}工作的用户，通常关心三件事：能不能更快完成任务，输出是否足够稳定，以及结果能不能放进真实业务流程。围绕这三个问题评估 {name}，比只看官网宣传语更接近搜索用户的真实需求。
 
-    在实际使用中，{name} 更适合处理{scenarios[0]}。{scenarios[1]}。如果流程以前依赖大量手动复制、整理和改写，可以先把任务拆成输入、生成、检查、发布四步，再逐步沉淀成固定模板。
+    适合人群：如果你是{persona}，并且正在寻找能够{intent}的工具，{name} 值得进入第一轮筛选。它尤其适合处理{primary_job}，也可以辅助完成{secondary_job}。如果你的团队已经有固定 SOP，建议先把 {name} 放到一个低风险环节里试用，例如草稿、素材整理、初步分析或批量预处理，再决定是否扩大到核心流程。
 
-    {differentiator} 对 SEO 内容站来说，介绍 {name} 时最好围绕明确关键词展开，例如“{keyword}推荐”“{name} 使用场景”“{category_name} AI 工具对比”。标题要直接说明用途，正文要回答适用人群、上手成本、限制和替代选择。
+    核心优势：{strength}。这类{keyword}的价值不只是“生成得快”，更重要的是降低重复劳动，让人把时间放在判断、编辑、审核和策略上。使用 {name} 时，可以把任务拆成“输入目标、提供上下文、生成结果、人工检查、沉淀模板”五步。这样做的好处是每次输出都有可复用的标准，而不是临时对话一次就结束。
 
-    选择 {name} 时，建议重点看三点：第一，核心输出是否满足真实任务；第二，是否支持团队协作、导出、历史记录或 API；第三，价格、隐私和版权条款是否适合商业项目。{compare}
+    上手流程：第一步，准备一个非常具体的任务，不要只输入“帮我做一下”。第二步，补充目标受众、格式、语气、限制条件和示例。第三步，用 {metric} 作为检查标准。第四步，把表现好的输入保存为模板。第五步，定期复盘哪些任务适合交给 {name}，哪些任务仍然应该由人完成，复盘时可以重点看{evaluation}。这个流程能显著提高稳定性，也更容易在团队里复制。
 
-    {ad_note} 如果你正在建设 AI 工具导航网站，可以把 {name} 页面做成“结论 + 场景 + 替代工具 + FAQ”的结构，再通过分类页和相关文章互相链接。
+    可能限制：{limitation}。很多工具在演示页面看起来很强，但真正用于商业项目时，还要检查价格、导出格式、数据隐私、版权条款、中文支持、协作权限和历史记录。对于需要发布到公开渠道的内容，{pitfall}。因此，{name} 更适合被视为提效工具，而不是完全替代专业人员的自动机器。
 
-    常见问题：{qa[0]} {qa[1]}
+    选择建议：评估 {name} 时，可以从四个角度判断。第一，核心任务是否覆盖你的主场景；第二，生成结果是否稳定，是否需要大量返工；第三，是否能和现有工具协同，例如文档、表格、设计软件、代码仓库或自动化平台；第四，长期成本是否可控。如果这些答案都比较清楚，{name} 就更适合进入正式试用。
+
+    替代工具：同类页面可以继续比较 {alternatives}。如果你更在意免费额度，可以优先看入门限制；如果你更在意团队落地，要看权限、版本管理和导出能力；如果你面向中文市场，还要重点检查中文理解、术语一致性和本地化效果。不要只看单个工具，横向比较通常能更快找到合适方案。
+
+    搜索意图与决策建议：多数用户搜索“{keyword}推荐”“{name}是什么”“{name}替代工具”时，并不是只想看到一句简介，而是想快速判断它是否适合自己的场景。阅读这一类工具页时，建议把注意力放在适用任务、限制条件、替代方案和成本上。只要这些问题回答清楚，就能减少反复搜索，也能更快做出试用或放弃的决定。
+
+    常见问题：{name} 适合新手吗？适合，但建议从单一任务开始，不要一上来就替代完整流程。{name} 可以直接商用吗？要看具体输出、授权和隐私条款，发布前仍需要人工审核。{name} 值得付费吗？如果它能持续节省时间、减少返工，并且输出能进入正式业务流程，付费才更有意义。
     """
     body = clean_paragraphs(body)
-    fillers = [
-        f"补充建议：发布前可以加入真实截图、测试案例或更新日期，让页面比普通采集站更可信。",
-        f"运营建议：同一分类下应保留横向对比入口，用户看完 {name} 后能继续浏览其他 {keyword}。",
-        f"风险提醒：不要承诺工具永远免费或效果绝对准确，具体功能和价格应以官方页面为准。",
-    ]
-    index = 0
-    while count_text_chars(body) < 760:
-        body += "\n\n" + fillers[index % len(fillers)]
-        index += 1
     return body
 
 
@@ -259,6 +339,7 @@ def write_articles(tools: list[Tool]) -> None:
           <p class="eyebrow">{html.escape(tool.category_keyword)}</p>
           <h1>{html.escape(tool.title)}</h1>
           <p class="summary">{html.escape(tool.description)}</p>
+          {tool_fact_table(tool)}
           {ad_slot(f"article_top_{tool.slug}")}
           {article_html}
           {ad_slot(f"article_mid_{tool.slug}")}
@@ -407,6 +488,29 @@ def write_page(
     path.write_text(page, encoding="utf-8")
 
 
+def tool_fact_table(tool: Tool) -> str:
+    names = TOOLS_BY_CATEGORY[tool.category_id]
+    position = names.index(tool.name) + 1
+    profile = CATEGORY_PROFILES[tool.category_id]
+    primary_job = profile["jobs"][(position - 1) % len(profile["jobs"])]
+    metric = profile["metrics"][position % len(profile["metrics"])]
+    alternatives = "、".join((names[position:position + 3] + names[:max(0, 3 - len(names[position:position + 3]))])[:3])
+    rows = [
+        ("推荐场景", primary_job),
+        ("适合人群", profile["personas"][(position + 1) % len(profile["personas"])]),
+        ("评估重点", metric),
+        ("可比较工具", alternatives),
+    ]
+    return f"""
+    <table class="fact-table">
+      <tbody>
+        {"".join(f"<tr><th>{html.escape(label)}</th><td>{html.escape(value)}</td></tr>" for label, value in rows)}
+      </tbody>
+    </table>
+    <p class="editor-note">编辑提示：AI 工具功能、价格和授权条款变化很快，正式采购或商用前建议以官网信息和实际试用结果为准。</p>
+    """
+
+
 def tool_card(tool: Tool, prefix: str) -> str:
     initials = html.escape(tool.name[:2].upper())
     return f"""
@@ -455,11 +559,15 @@ def markdownish_to_html(text: str) -> str:
     html_parts = []
     for index, paragraph in enumerate(paragraphs):
         if index == 1:
-            html_parts.append("<h2>适用场景与核心价值</h2>")
+            html_parts.append("<h2>适合人群与使用场景</h2>")
         if index == 3:
-            html_parts.append("<h2>选择建议与 SEO 运营方式</h2>")
+            html_parts.append("<h2>上手流程与评估标准</h2>")
+        if index == 5:
+            html_parts.append("<h2>选择建议与替代工具</h2>")
+        if index == 7:
+            html_parts.append("<h2>SEO 价值与常见问题</h2>")
         if index == len(paragraphs) - 1:
-            html_parts.append("<h2>常见问题</h2>")
+            html_parts.append("<h2>FAQ</h2>")
         html_parts.append(f"<p>{html.escape(paragraph)}</p>")
     return "\n".join(html_parts)
 
@@ -497,6 +605,7 @@ nav{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:14px}main{
 .logo{display:inline-grid;place-items:center;width:42px;height:42px;margin-right:8px;background:var(--accent);color:white;border-radius:8px;font-size:12px;font-weight:900}.tool-card p{font-size:14px;margin-top:10px}.pill{float:right;padding:3px 8px;border:1px solid color-mix(in srgb,var(--accent),white 72%);border-radius:999px;background:#fff}
 .ad-slot{display:flex;flex-direction:column;justify-content:center;min-height:160px;padding:14px;border:1px dashed #a99f8d;background:#fffaf0;border-radius:8px;color:var(--muted)}.ad-slot span{font-size:12px;text-transform:uppercase;color:#8b7f6d}.ad-slot strong{color:var(--ink)}
 .article{max-width:820px;margin:18px auto;padding:22px;border:1px solid var(--line);background:var(--panel);border-radius:8px}.article h1{font-size:44px}.summary{font-size:18px;color:#445047}.breadcrumb{font-size:13px;color:var(--muted);margin-bottom:12px}.related ul{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;padding-left:18px}
+.fact-table{width:100%;border-collapse:collapse;margin:18px 0;border:1px solid var(--line);background:#fff}.fact-table th,.fact-table td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}.fact-table th{width:116px;text-align:left;color:var(--ink);background:#f2eadc}.fact-table td{color:#445047}.editor-note{padding:10px 12px;border-left:4px solid var(--green);background:#eef7f1;color:#3e5548;border-radius:4px}
 footer{border-top:1px solid var(--line);padding:24px;text-align:center;color:var(--muted);font-size:14px}
 @media(max-width:820px){.site-header{align-items:flex-start;flex-direction:column;padding:12px 16px}.directory-head{grid-template-columns:1fr}h1{font-size:34px}.article h1{font-size:32px}.article{padding:16px}.category-grid,.tool-grid{grid-template-columns:1fr}}
 """
