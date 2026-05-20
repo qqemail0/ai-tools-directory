@@ -1,0 +1,18 @@
+{
+  "total_articles": 250,
+  "min_chars": 776,
+  "max_chars": 971,
+  "average_chars": 824.4,
+  "by_category": {
+    "writing": 25,
+    "research": 25,
+    "image": 25,
+    "video": 25,
+    "coding": 25,
+    "office": 25,
+    "marketing": 25,
+    "audio": 25,
+    "data": 25,
+    "automation": 25
+  }
+}
